@@ -1,33 +1,31 @@
-# Stage 1: Build Frontend
+# Stage 1: Build frontend
 FROM node:18-alpine AS frontend
 
-WORKDIR /app
+WORKDIR /app/frontend
 
-# Copy frontend code and env
-COPY web/frontend web/frontend
-COPY web/frontend/.env web/frontend/.env
-
-WORKDIR /app/web/frontend
+# Copy frontend source and .env
+COPY web/frontend/package*.json ./
+COPY web/frontend/.env .env
+COPY web/frontend ./
 
 RUN npm install && npm run build
 
-# Stage 2: Final backend image
+# Stage 2: Backend
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy root and backend files
+# Copy backend & root config
 COPY package*.json ./
-COPY web web
 COPY .env .env
+COPY web web
 COPY web/.env web/.env
-COPY --from=frontend /app/web/frontend/dist web/frontend/dist
 
-# Install root dependencies
+# Copy built frontend
+COPY --from=frontend /app/frontend/dist web/frontend/dist
+
 RUN npm install
 
-# Expose the port (adjust if different)
 EXPOSE 3000
 
-# Run your app
 CMD ["node", "web/index.js"]

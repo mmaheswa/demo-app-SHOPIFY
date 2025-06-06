@@ -1,17 +1,22 @@
 // @ts-check
 import { join } from "path";
 import { readFileSync } from "fs";
+import fs from "fs";
 import express from "express";
 import serveStatic from "serve-static";
 
 import shopify from "./shopify.js";
 import productCreator from "./product-creator.js";
 import PrivacyWebhookHandlers from "./privacy.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const PORT = parseInt(
   process.env.BACKEND_PORT || process.env.PORT || "3001",
   10
 );
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const STATIC_PATH =
   process.env.NODE_ENV === "production"
@@ -72,7 +77,15 @@ app.post("/api/products", async (_req, res) => {
 app.use(shopify.cspHeaders());
 app.use(serveStatic(STATIC_PATH, { index: false }));
 
-app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
+app.use("/*", shopify.ensureInstalledOnShop(), (_req, res, _next) => {
+    const indexPath = path.join(__dirname, "frontend", "dist", "index.html");
+
+  if (!fs.existsSync(indexPath)) {
+    console.error("index.html not found at", indexPath);
+    res.status(500).send("Frontend not built correctly.");
+    return;
+  }
+
   res
     .status(200)
     .set("Content-Type", "text/html")
