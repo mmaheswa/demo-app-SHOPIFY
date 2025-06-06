@@ -1,0 +1,28 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "c6ccfb58c8f5b8936a8d0dd42a69b0ff"
+name = "demo-app"
+handle = "demo-app-1497"
+application_url = "https://sensor-maintained-minneapolis-slovak.trycloudflare.com"
+embedded = true
+
+[build]
+include_config_on_deploy = true
+automatically_update_urls_on_dev = true
+
+[webhooks]
+api_version = "2025-04"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+
+[auth]
+redirect_urls = [
+  "https://sensor-maintained-minneapolis-slovak.trycloudflare.com/auth/callback",
+  "https://sensor-maintained-minneapolis-slovak.trycloudflare.com/auth/shopify/callback",
+  "https://sensor-maintained-minneapolis-slovak.trycloudflare.com/api/auth/callback"
+]
+
+[pos]
+embedded = false
