@@ -19,8 +19,8 @@ const __dirname = path.dirname(__filename);
 
 const STATIC_PATH =
   process.env.NODE_ENV === "production"
-    ? `${process.cwd()}/frontend/dist/`
-    : `${process.cwd()}/frontend/dist/`;
+    ? `${process.cwd()}/web/frontend/dist/`
+    : `${process.cwd()}/web/frontend/dist/`;
 
 const app = express();
 
