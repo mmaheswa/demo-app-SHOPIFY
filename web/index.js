@@ -1,7 +1,6 @@
 // @ts-check
 import { join } from "path";
 import { readFileSync } from "fs";
-import fs from "fs";
 import express from "express";
 import serveStatic from "serve-static";
 
@@ -20,8 +19,8 @@ const __dirname = path.dirname(__filename);
 
 const STATIC_PATH =
   process.env.NODE_ENV === "production"
-    ? `${process.cwd()}/frontend/dist`
-    : `${process.cwd()}/frontend/`;
+    ? `${process.cwd()}/frontend/dist/`
+    : `${process.cwd()}/frontend/dist/`;
 
 const app = express();
 
@@ -77,15 +76,9 @@ app.post("/api/products", async (_req, res) => {
 app.use(shopify.cspHeaders());
 app.use(serveStatic(STATIC_PATH, { index: false }));
 
-app.use("/*", shopify.ensureInstalledOnShop(), (_req, res, _next) => {
-    const indexPath = path.join(__dirname, "frontend", "dist", "index.html");
-
-  if (!fs.existsSync(indexPath)) {
-    console.error("index.html not found at", indexPath);
-    res.status(500).send("Frontend not built correctly.");
-    return;
-  }
-
+app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
+  console.log(`Using static path: ${STATIC_PATH}`);
+  console.log(`Using shopify API key: ${process.env.NODE_ENV}`);
   res
     .status(200)
     .set("Content-Type", "text/html")

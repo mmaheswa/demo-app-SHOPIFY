@@ -5,12 +5,13 @@
   "license": "UNLICENSED",
   "scripts": {
     "shopify": "shopify",
-    "build": "shopify app build",
+    "build": "cd web/frontend && npm install && npm run build",
     "dev": "shopify app dev",
     "info": "shopify app info",
     "generate": "shopify app generate",
     "deploy": "shopify app deploy",
-    "start": "node web/index.js"
+    "start": "node web/index.js",
+    "render-build": "npm install && npm run build"
   },
   "dependencies": {
     "dotenv": "^16.5.0"
