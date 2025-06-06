@@ -76,7 +76,7 @@ app.post("/api/products", async (_req, res) => {
 app.use(shopify.cspHeaders());
 app.use(serveStatic(STATIC_PATH, { index: false }));
 
-app.use("/*", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
+app.use("/", shopify.ensureInstalledOnShop(), async (_req, res, _next) => {
   console.log(`Using static path: ${STATIC_PATH}`);
   console.log(`Using shopify API key: ${process.env.NODE_ENV}`);
   res
